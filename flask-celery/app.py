@@ -7,8 +7,8 @@ from celery import Celery
 app = Flask(__name__)
 api = Api(app)
 
-app.config['CELERY_BROKER_URL'] = 'redis://{0}:{1}/0'.format(constants.BASE_IP, constants.REDIS_PORT)
-app.config['CELERY_RESULT_BACKEND'] = 'redis://{0}:{1}/0'.format(constants.BASE_IP, constants.REDIS_PORT)
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 
 # Initialize Celery
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
@@ -27,7 +27,7 @@ api.add_resource(MyObject, '/myRoute')
 
 if __name__ == '__main__':
     def celery_thread():
-        call(["python", "./run.py"])
+        call(["python", "./flask-celery/run.py"])
     processThread = threading.Thread(target=celery_thread)
     processThread.start()
 
