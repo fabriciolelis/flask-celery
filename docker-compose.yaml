@@ -1,6 +1,13 @@
 version: '2'
 
 services:
+  flask-celery:
+    build: 
+      context: flask-celery/
+    image: flask-celery
+    container_name: flask-celery
+    ports: 
+      - 5000:5000
   redis:
     image: 'bitnami/redis:5.0'
     environment:
