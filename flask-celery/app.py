@@ -20,9 +20,14 @@ def my_celery_task():
     print "This only example, create your task"
 
 class MyObject(Resource):
-    def post(self):
+    def post(self): #This starts a task in background
         task_id = my_celery_task.delay()
-        data = {"task_id": task_id}
+        data = {"task_id": task_id, "status": "running"}
+        return jsonify(data)
+    def delete(self): #This request finishes the celery task with task_id
+        task_id = request.json['task_id']
+        my_celery_task.AsyncResult(task_id).revoke(terminate=True)
+        data = {"task_id": task_id, "status": "finished"}
         return jsonify(data)
 
 api.add_resource(MyObject, '/myRoute')
